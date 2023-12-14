@@ -19,7 +19,8 @@ class AuthController(
     fun authentication(@RequestBody request: AuthenticationRequest): AuthenticationResponse =
         userService.authentication(request)
 
-
+    @PostMapping("register")
+    fun register(@RequestBody request: RegisterRequest): BaseResponse<Any> = userService.register(request)
 }
 
 @Controller

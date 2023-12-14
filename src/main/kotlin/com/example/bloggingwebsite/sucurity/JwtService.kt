@@ -2,6 +2,7 @@ package com.example.bloggingwebsite.sucurity
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
@@ -81,8 +82,9 @@ class JwtService {
             .setSubject(userDetails.username)
             .setIssuedAt(Date(System.currentTimeMillis()))
             .setExpiration(Date(System.currentTimeMillis() + expiration))
-            .signWith(getSignInKey()/*, SignatureAlgorithm.HS256*/)
-            .compact();
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .setHeaderParam("typ", "JWT")
+            .compact()
     }
 
     fun isValidToken(token: String, userDetails: UserDetails): Boolean {

@@ -66,3 +66,11 @@ data class AuthenticationResponse(
     @JsonProperty("access_token") val accessToken: String,
     @JsonProperty("refresh_token") val refreshToken: String,
 )
+
+@AllArgsConstructor
+@NoArgsConstructor
+class ApiResponse<T>(
+    val data: T,
+    val success: Boolean,
+    val message: String,
+)
