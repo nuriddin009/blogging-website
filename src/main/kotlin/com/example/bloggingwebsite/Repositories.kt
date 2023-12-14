@@ -50,10 +50,16 @@ interface CommentRepository : BaseRepository<Comment> {
 
 
 interface UserRepository : BaseRepository<User> {
-
-
+    fun findByUsername(username: String): Optional<User>
+    fun existsByUsername(username: String): Boolean
 }
 
 interface PostRepository : BaseRepository<Post> {
 
+
+}
+
+
+interface RoleRepository : BaseRepository<Role> {
+    fun findByRoleName(roleName: RoleName): Role;
 }

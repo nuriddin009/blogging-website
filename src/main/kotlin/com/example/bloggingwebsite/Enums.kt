@@ -14,3 +14,8 @@ enum class ReactionType {
     LIKE,
     DISLIKE
 }
+
+enum class Status {
+    ACTIVE, BLOCK, CONFIRM;
+}
+

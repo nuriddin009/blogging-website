@@ -5,20 +5,23 @@ import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.hibernate.annotations.ColumnDefault
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
+import java.time.LocalDateTime
 import java.util.*
 
 
 @MappedSuperclass
 class BaseEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
+    @Id @GeneratedValue(strategy = GenerationType.UUID) var id: UUID? = null,
     @CreatedBy @ManyToOne var createdBy: User? = null,
     @LastModifiedBy @JoinColumn(updatable = false) @ManyToOne var updatedBy: User? = null,
-    @CreatedDate @Temporal(TemporalType.TIMESTAMP) var createdDate: Date? = null,
-    @LastModifiedDate @Temporal(TemporalType.TIMESTAMP) var modifiedDate: Date? = null,
+    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) var createdDate: LocalDateTime? = null,
+    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) var updatedDate: LocalDateTime? = null,
     @Column(nullable = false) @ColumnDefault(value = "false") var deleted: Boolean = false,
 )
 
@@ -29,6 +32,7 @@ class User(
     var lastname: String,
     var username: String,
     var password: String,
+    @Enumerated(EnumType.STRING) var status: Status,
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_role",
