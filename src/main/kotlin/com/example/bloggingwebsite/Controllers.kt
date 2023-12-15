@@ -48,6 +48,10 @@ class PostController(
 
     }
 
+    fun createPost(@RequestBody postRequest: PostRequest){
+        postService.createPost(postRequest)
+    }
+
 }
 
 

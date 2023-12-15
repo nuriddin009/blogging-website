@@ -12,6 +12,7 @@ interface CommentService {
 @Service
 class CommentServiceImpl(
     private val commentRepository: CommentRepository,
+    private val userSession: UserSession,
 ) : CommentService {
     override fun getPostComments(postId: UUID): List<Comment> {
         TODO("Not yet implemented")

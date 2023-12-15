@@ -8,9 +8,7 @@ import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
-import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedBy
-import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -18,8 +16,8 @@ import java.util.*
 @MappedSuperclass
 class BaseEntity(
     @Id @GeneratedValue(strategy = GenerationType.UUID) var id: UUID? = null,
-    @CreatedBy @ManyToOne var createdBy: User? = null,
-    @LastModifiedBy @JoinColumn(updatable = false) @ManyToOne var updatedBy: User? = null,
+    @CreatedBy @JoinColumn(updatable = false) @ManyToOne var createdBy: User? = null,
+    @LastModifiedBy @ManyToOne var updatedBy: User? = null,
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) var createdDate: LocalDateTime? = null,
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) var updatedDate: LocalDateTime? = null,
     @Column(nullable = false) @ColumnDefault(value = "false") var deleted: Boolean = false,
@@ -30,7 +28,7 @@ class BaseEntity(
 class User(
     var firstname: String,
     var lastname: String,
-    var username: String,
+    var email: String,
     var password: String,
     @Enumerated(EnumType.STRING) var status: Status,
     @ManyToMany(fetch = FetchType.EAGER)
@@ -65,13 +63,14 @@ class Post(
     var verified: Boolean,
     var likes: Int,
     var dislikes: Int,
+    @ManyToOne @JsonManagedReference var user: User,
     @ManyToMany
     @JoinTable(
         name = "post_tags",
         joinColumns = [JoinColumn(name = "post_id")],
         inverseJoinColumns = [JoinColumn(name = "tag_id")]
     )
-    val tags: MutableList<Tag>,
+    val tags: List<Tag>,
 ) : BaseEntity()
 
 

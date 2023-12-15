@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import java.io.Serializable
 import java.time.LocalDateTime
+import java.util.UUID
 
 
 data class UserManager(var user: User) : UserDetails {
@@ -18,7 +20,7 @@ data class UserManager(var user: User) : UserDetails {
 
     override fun getPassword(): String = user.password
 
-    override fun getUsername(): String = user.username
+    override fun getUsername(): String = user.email
 
     override fun isAccountNonExpired(): Boolean = true
 
@@ -43,6 +45,14 @@ data class RegisterRequest(
     val lastname: String,
 
     )
+
+
+data class PostRequest(
+    val title: String,
+    val body: String,
+    val tagIds: List<UUID>,
+) : Serializable
+
 
 @AllArgsConstructor
 @NoArgsConstructor

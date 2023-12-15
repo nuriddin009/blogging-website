@@ -19,21 +19,20 @@ class UserServiceImpl(
     private val jwtService: JwtService,
     private val authenticationManager: AuthenticationManager,
     private val roleRepository: RoleRepository,
+    private val userSession: UserSession,
 ) : UserService {
-
-
     override fun authentication(request: AuthenticationRequest): AuthenticationResponse {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(request.username, request.password)
         )
-        val user = userRepository.findByUsername(request.username).orElseThrow()
+        val user = userRepository.findByEmail(request.username).orElseThrow()
         val accessToken = jwtService.generateToken(UserManager(user))
         val refreshToken = jwtService.generateRefreshToken(UserManager(user))
         return AuthenticationResponse(accessToken, refreshToken)
     }
 
     override fun register(request: RegisterRequest): BaseResponse<Any> {
-        if (!userRepository.existsByUsername(request.username)) {
+        if (!userRepository.existsByEmail(request.username)) {
             val roleUser = roleRepository.findByRoleName(RoleName.ROLE_USER)
 
             if (request.password == request.confirmPassword) {
@@ -50,8 +49,10 @@ class UserServiceImpl(
                 val refreshToken = jwtService.generateRefreshToken(UserManager(user))
 
                 return BaseResponse(
-                    false, "accessToken : $accessToken\n " +
-                            "refreshToken : $refreshToken"
+                    false, buildString {
+                        append("accessToken : $accessToken\n")
+                        append("refreshToken : $refreshToken")
+                    }
                 )
             }
             return BaseResponse(true, "PASSWORD NOT MATCHED")
@@ -59,6 +60,11 @@ class UserServiceImpl(
 
         return BaseResponse(true, "INTERNAL SERVER ERROR")
     }
+
+
+
+
+
 }
 
 

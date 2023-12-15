@@ -51,16 +51,21 @@ interface CommentRepository : BaseRepository<Comment> {
 
 
 interface UserRepository : BaseRepository<User> {
-    fun findByUsername(username: String): Optional<User>
-    fun existsByUsername(username: String): Boolean
+    fun findByEmail(email: String): Optional<User>
+    fun existsByEmail(email: String): Boolean
 }
 
 interface PostRepository : BaseRepository<Post> {
-
-
+    fun findAllByVerifiedAndDeletedFalse(verified: Boolean, pageable: Pageable): Page<PostProjection>
 }
 
 
 interface RoleRepository : BaseRepository<Role> {
     fun findByRoleName(roleName: RoleName): Role
 }
+
+interface PostReactionRepository : BaseRepository<PostReaction> {
+    fun findByUserAndPostAndDeletedFalse(user: User, post: Post): Optional<PostReaction>
+}
+
+interface TagRepository : BaseRepository<Tag>
