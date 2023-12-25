@@ -29,7 +29,7 @@ class UserController(
     private val userService: UserService,
 ) {
 
-    @GetMapping
+    @GetMapping("findAll")
     fun getUsers() {
 
     }

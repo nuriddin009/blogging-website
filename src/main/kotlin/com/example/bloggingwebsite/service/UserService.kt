@@ -2,6 +2,8 @@ package com.example.bloggingwebsite.service
 
 import com.example.bloggingwebsite.*
 import com.example.bloggingwebsite.sucurity.JwtService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service
 interface UserService {
     fun authentication(request: AuthenticationRequest): AuthenticationResponse
     fun register(request: RegisterRequest): BaseResponse<Any>
+    fun getUsers(page: Int, size: Int): Page<User>
 }
 
 @Service
@@ -61,9 +64,8 @@ class UserServiceImpl(
         return BaseResponse(true, "INTERNAL SERVER ERROR")
     }
 
-
-
-
+    override fun getUsers(page: Int, size: Int): Page<User> =
+        userRepository.findAllNotDeleted(PageRequest.of(page - 1, size))
 
 }
 
